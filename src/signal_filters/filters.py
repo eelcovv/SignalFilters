@@ -734,7 +734,7 @@ def butterworth_filter(
 
     First create a noise signal with 2 harmonics with a period of 2.5 s and 1.0 s
 
-    >>> x = np.linspace(0, 10, num=500, endpoint=True)
+    >>> x = np.linspace(0, 10, num=500)
     >>> fs = 1 / (x[1] - x[0])
     >>> y_orig = np.sin(2 * pi * x / 2.5) + np.sin(2 * pi * x / 1.0)
     >>> y_noise = y_orig + np.random.random_sample(x.size)
