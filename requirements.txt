@@ -1,3 +1,6 @@
+funcy
+
+matplotlib
 numpy
 pandas
 PeakUtils
