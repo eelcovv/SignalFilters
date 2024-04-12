@@ -6,7 +6,8 @@ and how to analyse the spectra of the signals
 import matplotlib.pyplot as plt
 from numpy import linspace, pi, random, sin
 from scipy.signal import welch
-from signal_processing.filters import bandpass_block_filter
+
+from signal_filters import bandpass_block_filter
 
 T = 2.5
 A = 1.0
