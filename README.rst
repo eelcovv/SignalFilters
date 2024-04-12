@@ -1,67 +1,52 @@
-.. These are examples of badges you might want to add to your README:
-   please update the URLs accordingly
-
-    .. image:: https://api.cirrus-ci.com/github/<USER>/SignalFilters.svg?branch=main
-        :alt: Built Status
-        :target: https://cirrus-ci.com/github/<USER>/SignalFilters
-    .. image:: https://readthedocs.org/projects/SignalFilters/badge/?version=latest
-        :alt: ReadTheDocs
-        :target: https://SignalFilters.readthedocs.io/en/stable/
-    .. image:: https://img.shields.io/coveralls/github/<USER>/SignalFilters/main.svg
-        :alt: Coveralls
-        :target: https://coveralls.io/r/<USER>/SignalFilters
-    .. image:: https://img.shields.io/pypi/v/SignalFilters.svg
-        :alt: PyPI-Server
-        :target: https://pypi.org/project/SignalFilters/
-    .. image:: https://img.shields.io/conda/vn/conda-forge/SignalFilters.svg
-        :alt: Conda-Forge
-        :target: https://anaconda.org/conda-forge/SignalFilters
-    .. image:: https://pepy.tech/badge/SignalFilters/month
-        :alt: Monthly Downloads
-        :target: https://pepy.tech/project/SignalFilters
-    .. image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter
-        :alt: Twitter
-        :target: https://twitter.com/SignalFilters
-
-.. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
-    :alt: Project generated with PyScaffold
-    :target: https://pyscaffold.org/
-
-|
-
 =============
 SignalFilters
 =============
 
 
-    Add a short description here!
+    A collection of digital signal filter front end for scipy
 
 
-A longer description of your project goes here...
+A collection of signal processing tools, utilities and class for signal processing
 
+Description
+===========
 
-.. _pyscaffold-notes:
+The signal processing tool box has the following topics
 
-Making Changes & Contributing
-=============================
+1. filters: Definition of three digital signal filters (all with low, high, -band-pass mode)
+    - Ideal block filter
+    - Butterworth filter
+    - Kaiser filter
+    - Phase shift removal
+2. utils: Classes and function to support signal processing
+    - SignalGenerator: class to generated signal with multiple harmonic components and noise for
+      testing purposes
+    - get_peaks: Extract the peaks from a power spectral density
 
-This project uses `pre-commit`_, please make sure to install it before making any
-changes::
+Notes
+-----
 
-    pip install pre-commit
-    cd SignalFilters
-    pre-commit install
+* The `SciPy`_ provides most signal processing tool, such as as power spectral density estimator
+  *welch*, which uses an equivalent algorithm as the *specdens* fuction from the Matlab tool box
+* The filters defined in this package are in fact front ends to the Scipy filters, however,
+  in this package the filters have a more user-friendly interface.
+* For peak finding either the `PeakUtils`_ or the `PyWafo`_ package is recommended.
+* The function *get_peaks* is a front end to the *peakutils.peaks* function
 
-It is a good idea to update the hooks to the latest version::
+Examples
+========
 
-    pre-commit autoupdate
+* Wave Spectra Functions : :download:`../examples/example_filtering.html`
 
-Don't forget to tell your contributors to also install and use pre-commit.
-
-.. _pre-commit: https://pre-commit.com/
+.. _PeakUtils:
+   https://pypi.python.org/pypi/PeakUtils
+.. _SciPy:
+   https://www.scipy.org/
+.. _PyWafo:
+    https://github.com/wafo-project/pywafo
 
 Note
 ====
 
-This project has been set up using PyScaffold 4.5. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
+This project has been set up using PyScaffold 2.5.6. For details and usage
+information on PyScaffold see http://pyscaffold.readthedocs.org/.
