@@ -35,14 +35,14 @@ plt.title("Demonstration block filter time series")
 (
     ff,
     psd_y_orig,
-) = welch(y_orig, fs, window="hann")
-ff, psd_y_noise = welch(y_noise, fs, window="hann")
-ff, psd_y_recov = welch(y_recov, fs, window="hann")
+) = welch(y_orig, fs)
+ff, psd_y_noise = welch(y_noise, fs)
+ff, psd_y_recover = welch(y_recov, fs)
 
 plt.figure("PSD")
 plt.plot(ff, psd_y_orig, label="original")
 plt.plot(ff, psd_y_noise, label="noise")
-plt.plot(ff, psd_y_recov, label="block")
+plt.plot(ff, psd_y_recover, label="block")
 plt.semilogy()
 plt.legend()
 plt.xlabel("Frequency [Hz]")
@@ -51,7 +51,7 @@ plt.title("PSD [s]")
 plt.title("Demonstration block filter power spectral densities")
 
 
-ff2, psd_y_noise2 = welch(y_noise, fs, window="hann", nperseg=128, nfft=128)
+ff2, psd_y_noise2 = welch(y_noise, fs, nperseg=128, nfft=128)
 
 var_noise = y_noise.var()
 e_sum_1 = psd_y_noise.sum() * (ff[1] - ff[0])

@@ -137,7 +137,7 @@ def filter_and_compare(
         w, h = freqz(taps, worN=2000)
         plt.plot(f_sample * 0.5 * w / np.pi, abs(h), "--g", label="FIR")
 
-    plt.legend(loc="outside")
+    # plt.legend(loc="outside")
 
     # set a reference to the signal data
     x = signal.data
@@ -170,7 +170,7 @@ def filter_and_compare(
             )
 
     fig2, axis = plt.subplots(ncols=1, nrows=2, figsize=(10, 12))
-    fig2.canvas.set_window_title("Signal vs time")
+    fig2.canvas.manager.set_window_title("Signal vs time")
 
     axis[0].plot(t, x, "--", label="Noisy signal", linewidth=1)
     axis[0].plot(t, signal.component["f_zero"].data, label="Target signal", linewidth=2)
@@ -292,6 +292,9 @@ def parse_the_command_line_arguments():
 
 
 def main():
+    """
+    main function of this example
+    """
     args, parser = parse_the_command_line_arguments()
 
     logger.debug("Calling the main function")
