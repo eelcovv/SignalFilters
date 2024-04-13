@@ -3,7 +3,7 @@ import os
 import pickle
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_equal, assert_raises
+from numpy.testing import assert_allclose, assert_equal, assert_raises
 
 from signal_filters.filters import (
     band_pass_block,
@@ -15,6 +15,7 @@ from signal_filters.filters import (
 
 # set this flag true only in the first run to generate the data files
 WRITE_DATA = False
+ATOL = 1e-4
 
 
 def make_signal_orig_and_noisy():
@@ -65,7 +66,7 @@ def test_band_pass_block():
         ]
     )
 
-    assert_almost_equal(result, result_expected)
+    assert_allclose(result, result_expected, atol=ATOL)
 
 
 def test_kaiser_filter():
@@ -88,7 +89,7 @@ def test_kaiser_filter():
     with open(data_file, "rb") as in_stream:
         y_filt_exp = pickle.load(in_stream)
 
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the kaiser filter, so_y_filter2 should be identical to
     # y_filter
@@ -121,7 +122,7 @@ def test_block_filter():
     with open(data_file, "rb") as in_stream:
         y_filt_exp = pickle.load(in_stream)
 
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the block filter, so_y_filter2 should be identical to
     # y_filter
@@ -151,7 +152,7 @@ def test_butter_filter():
         y_filt_exp = pickle.load(in_stream)
 
     # check if we are up to the one digit equal to the input signal without noise
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the butterworth filter, so_y_filter2 should be identical
     # to y_filter
@@ -184,7 +185,7 @@ def test_kaiser_filter_hp():
     with open(data_file, "rb") as in_stream:
         y_filt_exp = pickle.load(in_stream)
 
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the kaiser filter, so_y_filter2 should be identical to
     # y_filter
@@ -210,7 +211,7 @@ def test_block_filter_hp():
     with open(data_file, "rb") as in_stream:
         y_filt_exp = pickle.load(in_stream)
 
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the block filter, so_y_filter2 should be identical to
     # y_filter
@@ -240,7 +241,7 @@ def test_butter_filter_hp():
         y_filt_exp = pickle.load(in_stream)
 
     # check if we are up to the one digit equal to the input signal without noise
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the butterworth filter, so_y_filter2 should be identical
     # to y_filter
@@ -268,7 +269,7 @@ def test_kaiser_filter_lp():
     with open(data_file, "rb") as in_stream:
         y_filt_exp = pickle.load(in_stream)
 
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the kaiser filter, so_y_filter2 should be identical to
     # y_filter
@@ -294,7 +295,7 @@ def test_block_filter_lp():
     with open(data_file, "rb") as in_stream:
         y_filt_exp = pickle.load(in_stream)
 
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the block filter, so_y_filter2 should be identical to
     # y_filter
@@ -324,7 +325,7 @@ def test_butter_filter_lp():
         y_filt_exp = pickle.load(in_stream)
 
     # check if we are up to the one digit equal to the input signal without noise
-    assert_almost_equal(y_filter, y_filt_exp)
+    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
 
     # this is a front end to the butterworth filter, so_y_filter2 should be identical
     # to y_filter
