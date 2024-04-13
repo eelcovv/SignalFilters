@@ -52,5 +52,5 @@ Examples
 Note
 ====
 
-This project has been set up using PyScaffold 2.5.6. For details and usage
+This project has been set up using PyScaffold 4.5.0. For details and usage
 information on PyScaffold see http://pyscaffold.readthedocs.org/.
