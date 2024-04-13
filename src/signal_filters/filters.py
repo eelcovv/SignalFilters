@@ -96,12 +96,12 @@ def matrix_fft(
       treatment: named input arguments are used Major difference is that this
       routine is only for 1-D signals, in the matlab code the array may contain
       more than one 1-D signals.
-      In case more than one signal needs to be filtered, in the python version
+    * In case more than one signal needs to be filtered, in the python version
       you need to loop over the signals. Since the filter is linear it does not
       influence the calculation time
-
     * Depending on the option s, the following input argument are used an may
-      not be None
+      not be None::
+
        1.   spec 2 DFT    use: [om_DFT,DFT]       = matfft(om_spec,spec,eps,1)
        2.   apply RAO     use: [om_DFT,DFT]       = matfft(om_DFT, DFT,om_RAO,
                                                                        RAO,2)
@@ -739,45 +739,43 @@ def butterworth_filter(
     >>> y_orig = np.sin(2 * pi * x / 2.5) + np.sin(2 * pi * x / 1.0)
     >>> y_noise = y_orig + np.random.random_sample(x.size)
 
-    Filter the signal with the high pass butt block filter to recover the peak with
+    Filter the signal with the high pass butt block filter to recover the peak with a
     period of 1.0 s.
     Note that for the high-pass filter, we have to define the low-cut frequency
-    f_low (as all the frequency below f_low are suppressed)
+    f_low (as all the frequencies below f_low are suppressed)
 
     >>> f_low = 1 / 2.0 # T = 2.0 s. f_low is the frequency in Hz
     >>> y_recover = butterworth_filter(y_noise, f_cut_low=f_low, order=4, fs=fs)
 
     The recovered signal *y_recov* now contains the filtered signal.
 
-    We can also apply a low-pass filter in order to remove the peak with a
-    frequency of 1 Hz
+    We can also apply a low-pass filter to remove the peak with a frequency of 1 Hz
 
     >>> f_high = 1 / 2.0  # T = 2.0 s. f_low is the frequency in Hz
     >>> y_recover = butterworth_filter(y_noise, f_cut_high=f_high, order=4, fs=fs)
 
     Perhaps better would be to use a band pass filter by both defining a high
     and low cut-off frequency. If we want to recover the peak with a period of
-    1.0 s we can do
+    1.0 seconds we can do
 
     >>> f_high = 1 / 0.5  # T = 0.5 s. Supress all frequencies above 2 Hz
-    >>> f_low = 1 / 2.0  # T = 2.0 s. Suppress all frequency below  0.5 Hz
+    >>> f_low = 1 / 2.0  # T = 2.0 s. Suppress all frequency below 0.5 Hz
     >>> y_recover = butterworth_filter(y_noise, f_cut_high=f_high, f_cut_low=f_low,
-                                       fs=fs)
+    ...                                fs=fs)
 
     Notes
     -----
-    * The *order* argument is used to control the sharpness of the filter:
-      a high order will result in a stronger suppression of frequencies outside
-      the cut-off limits
-    * A *order* which is too high also leads to an overflow of the filter.
-      Use trial-and-error to find an optimal *order*. Typically, *order* should be
+    * The *order* argument is used to control the sharpness of the filter a high order
+      will result in a stronger suppression of frequencies outside the cut-off limits.
+    * An *order* which is too high also leads to an overflow of the filter. Use
+      trial-and-error to find an optimal *order*. Typically, *order* should be
       between 2 and 5
     * In case the filter type is set to *high*, only the low cut-off frequence
       f_cut_low needs to be defined: all the frequencies below f_cut_low will be
-       suppressed (hence: high-pass)
+      suppressed (hence: high-pass)
     * In case the filter type is set to *low*, only the high cut-off frequence
       f_cut_high needs to be defined: all the frequencies above f_cut_high will
-       be suppressed (hence: low-pass)
+      be suppressed (hence: low-pass)
     """
     if f_cut_high is None and f_cut_low is None:
         raise ValueError(
@@ -832,8 +830,8 @@ def remove_phase_shift(signal, degrees=True):
     Notes
     -----
     * The yaw angle sometimes has discontinuities when the phase angle goes from 0 to
-      360. In order to avoid this, in this routine the range of the yaw is put as
-      good as possible in the range between 0 and 360.
+      360. To avoid this, in this routine the range of the yaw is put as good as
+      possible in the range between 0 and 360.
     * In case the MRU 6-DOF motions need to be filtered in order to obtain
       the accelerations, the yaw needs to be put into the range 0~360, otherwise the
       discontinuity at 0 degrees will lead to an artificial spike in the acceleration.
@@ -848,7 +846,7 @@ def remove_phase_shift(signal, degrees=True):
     discontinuity at 0.
 
     >>> yaw = np.hstack([np.linspace(350, 360, num=5, endpoint=False),
-                         np.linspace(0, 10, num=5)])
+    ...                  np.linspace(0, 10, num=5)])
     >>> print(yaw)
     [ 350.   352.   354.   356.   358.     0.     2.5    5.     7.5   10. ]
 
