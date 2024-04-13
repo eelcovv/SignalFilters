@@ -39,7 +39,7 @@ import logging
 
 import numpy as np
 from numpy import pi
-from scipy.ndimage.interpolation import shift
+from scipy.ndimage import shift
 from scipy.signal import butter, filtfilt, firwin, kaiserord, lfilter
 
 BUTTER_DEFAULT_ORDER = 2
