@@ -38,8 +38,14 @@ Examples
 ========
 
 * Examples of using filtering with the *SignalFilters* package: `example_filtering`_
+  or `_example_filtering_rtd`_
 
-.. _example_filtering:  _static/example_filtering.html
+
+.. _example_filtering:
+    _static/example_filtering.html
+
+.. _example_filtering_rtd:
+    https://signalfilters.readthedocs.io/en/latest/_static/example_filtering.html
 
 .. _PeakUtils:
    https://pypi.python.org/pypi/PeakUtils
