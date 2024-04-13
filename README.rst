@@ -13,8 +13,7 @@ Description
 
 The signal processing tool box has the following topics
 
-1. filters: Definition of three digital signal filters (all with low, high, -band-pass
-   mode)
+1. filters: Definition of three digital signal filters (all with low, high, -band-pass mode)
     - Ideal block filter
     - Butterworth filter
     - Kaiser filter
