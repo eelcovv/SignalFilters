@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 from numpy import linspace, pi, random, sin
 from scipy.signal import welch
 
-from signal_filters import bandpass_block_filter
+from signal_filters.filters import bandpass_block_filter
 
 T = 2.5
 A = 1.0
 af = 0.3
-x = linspace(0, 10, num=500, endpoint=True)
+x = linspace(0, 10, num=500)
 fs = 1 / (x[1] - x[0])
 y_orig = A * sin(2 * pi * x / T)
 y_noise = y_orig + af * random.normal(0, 1, x.size)

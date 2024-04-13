@@ -13,15 +13,13 @@ import numpy as np
 from numpy import pi
 from scipy.signal import freqz, welch
 
-from signal_filters import (
-    bandpass_block_filter,
-    butterworth_filter,
-    kaiser_bandpass_filter,
-)
 from signal_filters.filters import (
     band_pass_block,
+    bandpass_block_filter,
     butter_bandpass_coefficients,
+    butterworth_filter,
     kaiser_bandpass_coefficients,
+    kaiser_bandpass_filter,
 )
 from signal_filters.utils import SignalGenerator
 
