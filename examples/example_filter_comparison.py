@@ -40,7 +40,7 @@ def filter_and_compare(
     timer_n_digits=0,
 ):
     """
-    Create a noise signal and filter it with several filter and compare the plots
+    Create a noise signal and filter it with several filters and compare the plots
 
     Parameters
     ----------
