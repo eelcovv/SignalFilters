@@ -36,7 +36,9 @@ Notes
 Examples
 ========
 
-* Wave Spectra Functions : :download:`../examples/example_filtering.html`
+* Examples of using filtering with the *SignalFilters* package: `example_filtering`_
+
+.. _example_filtering:  _static/example_filtering.html
 
 .. _PeakUtils:
    https://pypi.python.org/pypi/PeakUtils
