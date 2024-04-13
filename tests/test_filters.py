@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import os
 import pickle
 
@@ -19,6 +18,7 @@ ATOL = 1e-4
 
 
 def make_signal_orig_and_noisy():
+    """make a noisy test signal"""
     T = 10
     total_time = 1000
     f_sample = 10
@@ -36,6 +36,7 @@ def make_signal_orig_and_noisy():
 
 
 def test_band_pass_block():
+    """test the band pass block filter"""
     n_size = 20
     frequencies = np.linspace(0, 2.5, n_size, endpoint=False)
 
