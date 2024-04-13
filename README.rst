@@ -27,7 +27,7 @@ Notes
 -----
 
 * The `SciPy`_ provides most signal processing tool, such as as power spectral density
-  estimator *welch*, which uses an equivalent algorithm as the *specdens* fuction from
+  estimator *welch*, which uses an equivalent algorithm as the *specdens* function from
   the Matlab tool box
 * The filters defined in this package are in fact front ends to the Scipy filters,
   however, in this package the filters have a more user-friendly interface.
