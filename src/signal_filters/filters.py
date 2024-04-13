@@ -17,20 +17,20 @@ Notes
   filter, as only the frequencies below f_cut_low are suppress
 * In case only a high cut-off frequency is passed, the filters behave as a low
   pass-filter, as only the frequencies above the f_cut_high are suppressed.
-* In case both the low and high cut-off frequency are given, the filters are
+* In case both the low and high cut-off frequencies are given, the filters are
   band-pass filters.
 * The cut-off frequencies and the sample frequency are given in Hz.
 * The *kaiser_bandpass_filter* and *butter_bandpass_filter* are in fact front-ends to
   the *scipy* filters.
-  In order to use the scipy filter quite some steps are required to calculate
+  To use the scipy filter, quite some steps are required to calculate
   the filter coefficients.
   The implementations in this *signal_processing* package take care of that and then
-  calls the *scipy* filters.
+   call the *scipy* filters.
 * The Ideal block filter *bandpass_block_filter* is a literal copy of the
   Matlab *band_pass2* filter
 * On top of the base filters an extra front end is defined, *filter_signal*,
   which receives the same input arguments as all three filtered mentioned above,
-  plus an argument *filter_type*. With this function we can pick which filter we
+  plus an argument *filter_type*. With this function, we can pick which filter we
   want to use: *kaiser*, *block* or
   *butterworth*. The default choice is *block*.
 """
@@ -174,7 +174,7 @@ def matrix_fft(
         DFT = np.fft.fft(TT, n=n_fft)
         if n_fft != N:
             # in case we have used the add n_fft with a even N, append a zero
-            # at the end to correct the lenght
+            # at the end to correct the length
             DFT = np.append(DFT, np.array([0 + 0 * 1j]))
 
         if N % 2 == 0:
@@ -225,7 +225,7 @@ def bandpass_block_filter(T, X, wfiltlo=None, wfiltup=None):
     Raises
     ------
     ValueError:
-        * In case no cut off frequencies are defined
+        * In case no cut-off frequencies are defined
         * In case that wfiltlo >= wfiltup
 
     Examples
@@ -251,7 +251,7 @@ def bandpass_block_filter(T, X, wfiltlo=None, wfiltup=None):
     -----
     * Explicity extend the input signal with one value in case we have an odd
       signal. This is to avoid a bug in the fft making the function extremely
-      slow for an odd  amount of points.
+      slow for an odd number of points.
     * For the rest the original matlab code is followed as close as possible,
       which means that the variable naming does not follow the PIP standards
     """
@@ -380,21 +380,21 @@ def kaiser_bandpass_coefficients(lowcut, highcut, fs, f_width_edge=None, ripple_
 
     Parameters
     ----------
-    lowcut : float
+    lowcut: float
         The low cut-off frequency [Hz]
-    highcut : float
+    highcut: float
         The high cut-off frequency [Hz]
     fs: float
         Sample frequency [Hz]
     f_width_edge : float, optional
         Give the distance in Hz for the edges of the filter. If None, take 1 Hz.
         Default = None
-    ripple_db:   float, option.
+    ripple_db: float, option.
         The desired attenuation in the stop band, in dB. Default = 200 db
 
     Returns
     -------
-    tuple :
+    tuple:
         (*band_pass_coefficients*, *n_delay*)
 
         - *band_pass_coefficients*: list with the band pass coefficients
@@ -493,19 +493,19 @@ def kaiser_bandpass_filter(
     data: ndarray
         Input signal 1D
     lowcut: float or None, optional
-        Lower frequency in Hz. If lowcut frequency is not given, the filter
+        Lower frequency in Hz. If the low-cut frequency is not given, the filter
         turns into a low-pass filter with only a high cut-off frequency defined.
-        The highcut must be defined in that case
+        The high-cut must be defined in that case
     highcut: float or None, optional
-        higher frequency in Hz. If highcut freqyenc is not given the filter
+        higher frequency in Hz. If the high-cut frequency is not given the filter
         turns into a high-pass filter with only the low cut-off frequency
-        defined.  The lowcut frequency must be defined in that case
+        defined.  The low-cut frequency must be defined in that case
     fs: float, optional
         Sample frequency Hz. Default = 1.0 Hz
     f_width_edge: float, optional
         width of the edges. Default = 0.01
     ripple_db:  float, optional
-        Supresion of the stop band in dB. Default = 100
+        Suppression of the stop band in dB. Default = 100
     cval: float, optional
         Constant value just for the shift. Default = 0
     replace_cval_with_unfiltered_signal: bool, optional
