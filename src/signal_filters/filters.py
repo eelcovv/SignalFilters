@@ -773,16 +773,16 @@ def butterworth_filter(
       Use trial-and-error to find an optimal *order*. Typically, *order* should be
       between 2 and 5
     * In case the filter type is set to *high*, only the low cut-off frequence
-      f_lowcut needs to be defined: all the frequencies below f_lowcut will be
+      f_cut_low needs to be defined: all the frequencies below f_cut_low will be
        suppressed (hence: high-pass)
     * In case the filter type is set to *low*, only the high cut-off frequence
-      f_highcut needs to be defined: all the frequencies above f_highcut will
+      f_cut_high needs to be defined: all the frequencies above f_cut_high will
        be suppressed (hence: low-pass)
     """
     if f_cut_high is None and f_cut_low is None:
         raise ValueError(
             "At least one of the cut-off frequencies must be given "
-            "(f_highcut or f_lowcut)"
+            "(f_cut_high or f_cut_low)"
         )
     if f_cut_high is not None and f_cut_low is not None and f_cut_low >= f_cut_high:
         raise ValueError(
