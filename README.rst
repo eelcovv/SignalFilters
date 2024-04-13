@@ -38,7 +38,7 @@ Examples
 ========
 
 * Examples of using filtering with the *SignalFilters* package: `example_filtering`_
-  or `_example_filtering_rtd`_
+  or `example_filtering_rtd`_
 
 
 .. _example_filtering:

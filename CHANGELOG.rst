@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Version 0.0.6
+Version 0.0.7
 =============
 
 - Initialised first version of package
