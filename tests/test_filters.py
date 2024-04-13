@@ -1,3 +1,7 @@
+"""
+Unit tests for filters
+"""
+
 import os
 import pickle
 
@@ -19,15 +23,15 @@ ATOL = 1e-4
 
 def make_signal_orig_and_noisy():
     """make a noisy test signal"""
-    T = 10
+    period_time = 10
     total_time = 1000
     f_sample = 10
     n_points = total_time * f_sample
-    A = 1.0
-    ap = 0.5 * A
+    amplitude = 1.0
+    ap = 0.5 * amplitude
     time = np.linspace(0, total_time, num=n_points, endpoint=False)
 
-    y_original = A * np.sin(2 * np.pi * time / T)
+    y_original = amplitude * np.sin(2 * np.pi * time / period_time)
     np.random.seed(0)
     y_noise = np.random.normal(scale=ap, size=time.size)
     y_total = y_original + y_noise
@@ -88,9 +92,9 @@ def test_kaiser_filter():
             pickle.dump(y_filter, out_stream, pickle.HIGHEST_PROTOCOL)
 
     with open(data_file, "rb") as in_stream:
-        y_filt_exp = pickle.load(in_stream)
+        y_filter_expected = pickle.load(in_stream)
 
-    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
+    assert_allclose(y_filter, y_filter_expected, atol=ATOL)
 
     # this is a front end to the kaiser filter, so_y_filter2 should be identical to
     # y_filter
@@ -121,16 +125,14 @@ def test_block_filter():
             pickle.dump(y_filter, out_stream, pickle.HIGHEST_PROTOCOL)
 
     with open(data_file, "rb") as in_stream:
-        y_filt_exp = pickle.load(in_stream)
+        y_filter_expected = pickle.load(in_stream)
 
-    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
+    assert_allclose(y_filter, y_filter_expected, atol=ATOL)
 
     # this is a front end to the block filter, so_y_filter2 should be identical to
     # y_filter
     f_s = 1 / (time[1] - time[0])
-    y_filter2 = filter_signal(
-        y_tot, f_cut_low=0.05, f_cut_high=0.15, f_sampling=f_s, filter_type="block"
-    )
+    y_filter2 = filter_signal(y_tot, f_cut_low=0.05, f_cut_high=0.15, f_sampling=f_s)
     assert_equal(y_filter, y_filter2)
 
 
@@ -217,9 +219,7 @@ def test_block_filter_hp():
     # this is a front end to the block filter, so_y_filter2 should be identical to
     # y_filter
     f_s = 1 / (time[1] - time[0])
-    y_filter2 = filter_signal(
-        y_tot, f_cut_low=0.05, f_sampling=f_s, filter_type="block"
-    )
+    y_filter2 = filter_signal(y_tot, f_cut_low=0.05, f_sampling=f_s)
     assert_equal(y_filter, y_filter2)
 
 
@@ -294,16 +294,14 @@ def test_block_filter_lp():
             pickle.dump(y_filter, out_stream, pickle.HIGHEST_PROTOCOL)
 
     with open(data_file, "rb") as in_stream:
-        y_filt_exp = pickle.load(in_stream)
+        y_filter_expected = pickle.load(in_stream)
 
-    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
+    assert_allclose(y_filter, y_filter_expected, atol=ATOL)
 
     # this is a front end to the block filter, so_y_filter2 should be identical to
     # y_filter
-    f_s = 1 / (time[1] - time[0])
-    y_filter2 = filter_signal(
-        y_tot, f_cut_high=0.15, f_sampling=f_s, filter_type="block"
-    )
+    sampling_frequency = 1 / (time[1] - time[0])
+    y_filter2 = filter_signal(y_tot, f_cut_high=0.15, f_sampling=sampling_frequency)
     assert_equal(y_filter, y_filter2)
 
 
