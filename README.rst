@@ -13,23 +13,25 @@ Description
 
 The signal processing tool box has the following topics
 
-1. filters: Definition of three digital signal filters (all with low, high, -band-pass mode)
+1. filters: Definition of three digital signal filters (all with low, high, -band-pass
+   mode)
     - Ideal block filter
     - Butterworth filter
     - Kaiser filter
     - Phase shift removal
 2. utils: Classes and function to support signal processing
-    - SignalGenerator: class to generated signal with multiple harmonic components and noise for
-      testing purposes
+    - SignalGenerator: class to generated signal with multiple harmonic components and
+      noise for testing purposes
     - get_peaks: Extract the peaks from a power spectral density
 
 Notes
 -----
 
-* The `SciPy`_ provides most signal processing tool, such as as power spectral density estimator
-  *welch*, which uses an equivalent algorithm as the *specdens* fuction from the Matlab tool box
-* The filters defined in this package are in fact front ends to the Scipy filters, however,
-  in this package the filters have a more user-friendly interface.
+* The `SciPy`_ provides most signal processing tool, such as as power spectral density
+  estimator *welch*, which uses an equivalent algorithm as the *specdens* fuction from
+  the Matlab tool box
+* The filters defined in this package are in fact front ends to the Scipy filters,
+  however, in this package the filters have a more user-friendly interface.
 * For peak finding either the `PeakUtils`_ or the `PyWafo`_ package is recommended.
 * The function *get_peaks* is a front end to the *peakutils.peaks* function
 
