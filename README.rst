@@ -80,7 +80,7 @@ More examples can be found at example_filtering_ and example_filtering_rtd_.
    https://www.scipy.org/
 .. _PyWafo:
     https://github.com/wafo-project/pywafo
-.. _PyPi::
+.. _PyPi:
     https://pypi.org/project/SignalFilters/
 
 Notes
