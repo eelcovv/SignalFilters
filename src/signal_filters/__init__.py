@@ -1,11 +1,9 @@
-import importlib as _importlib
 import sys
 
 if sys.version_info[:2] >= (3, 8):
     # TODO: Import directly (no need for conditional) when `python_requires = >= 3.8`
     from importlib.metadata import PackageNotFoundError, version  # pragma: no cover
 else:
-    # noinspection PyUnresolvedReferences
     from importlib_metadata import PackageNotFoundError, version  # pragma: no cover
 
 try:
@@ -16,26 +14,3 @@ except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 finally:
     del version, PackageNotFoundError
-
-submodules = [
-    "filters",
-    "utils",
-]
-
-__all__ = submodules + [
-    "__version__",
-]
-
-
-def __dir__():
-    return __all__
-
-
-def __getattr__(name):
-    if name in submodules:
-        return _importlib.import_module(f"scipy.{name}")
-    else:
-        try:
-            return globals()[name]
-        except KeyError:
-            raise AttributeError(f"Module 'signal_filter' has no attribute '{name}'")

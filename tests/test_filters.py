@@ -141,7 +141,8 @@ def test_butter_filter():
 
     f_s = 1 / (time[1] - time[0])
 
-    y_filter = butterworth_filter(y_tot, f_lowcut=0.05, f_highcut=0.15, fs=f_s, order=4)
+    y_filter = butterworth_filter(y_tot, f_cut_low=0.05, f_cut_high=0.15, fs=f_s,
+                                  order=4)
 
     data_file = "data/butter_filter_bp.pkl"
     if not os.path.exists(data_file):
@@ -228,7 +229,7 @@ def test_butter_filter_hp():
 
     f_s = 1 / (time[1] - time[0])
 
-    y_filter = butterworth_filter(y_tot, f_lowcut=0.05, fs=f_s, order=4)
+    y_filter = butterworth_filter(y_tot, f_cut_low=0.05, fs=f_s, order=4)
 
     data_file = "data/butter_filter_hp.pkl"
     if not os.path.exists(data_file):
@@ -308,9 +309,9 @@ def test_block_filter_lp():
 def test_butter_filter_lp():
     time, y_orig, y_tot = make_signal_orig_and_noisy()
 
-    f_s = 1 / (time[1] - time[0])
+    sample_frequency = 1 / (time[1] - time[0])
 
-    y_filter = butterworth_filter(y_tot, f_highcut=0.15, fs=f_s, order=4)
+    y_filter = butterworth_filter(y_tot, f_cut_high=0.15, fs=sample_frequency, order=4)
 
     data_file = "data/butter_filter_lp.pkl"
     if not os.path.exists(data_file):
@@ -321,15 +322,16 @@ def test_butter_filter_lp():
             pickle.dump(y_filter, out_stream, pickle.HIGHEST_PROTOCOL)
 
     with open(data_file, "rb") as in_stream:
-        y_filt_exp = pickle.load(in_stream)
+        y_filter_expected = pickle.load(in_stream)
 
     # check if we are up to the one digit equal to the input signal without noise
-    assert_allclose(y_filter, y_filt_exp, atol=ATOL)
+    assert_allclose(y_filter, y_filter_expected, atol=ATOL)
 
     # this is a front end to the butterworth filter, so_y_filter2 should be identical
     # to y_filter
     y_filter2 = filter_signal(
-        y_tot, f_cut_high=0.15, f_sampling=f_s, filter_type="butterworth", order=4
+        y_tot, f_cut_high=0.15, f_sampling=sample_frequency, filter_type="butterworth",
+        order=4
     )
     assert_equal(y_filter, y_filter2)
 
@@ -338,8 +340,10 @@ def test_assertion_error():
     time, y_orig, y_tot = make_signal_orig_and_noisy()
 
     assert_raises(ValueError, butterworth_filter, y_tot)
-    assert_raises(ValueError, butterworth_filter, y_tot, f_lowcut=0.15, f_highcut=0.05)
-    assert_raises(ValueError, butterworth_filter, y_tot, f_lowcut=0.05, f_highcut=0.05)
+    assert_raises(ValueError, butterworth_filter, y_tot, f_cut_low=0.15,
+                  f_cut_high=0.05)
+    assert_raises(ValueError, butterworth_filter, y_tot, f_cut_low=0.05,
+                  f_cut_high=0.05)
     assert_raises(ValueError, kaiser_bandpass_filter, y_tot)
     assert_raises(ValueError, kaiser_bandpass_filter, y_tot, lowcut=0.15, highcut=0.05)
     assert_raises(ValueError, kaiser_bandpass_filter, y_tot, lowcut=0.05, highcut=0.05)

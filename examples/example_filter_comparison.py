@@ -35,12 +35,12 @@ def filter_and_compare(
     time_length=1800,
     f_kaiser_edge_width=0.1,
     f_low_cut=0.04,
-    f_highcut=0.25,
+    f_cut_high=0.25,
     timer_units="ms",
     timer_n_digits=0,
 ):
     """
-    Create a noise signal and filter it with several filter and compare the plots
+    Create a noise signal and filter it with several filters and compare the plots
 
     Parameters
     ----------
@@ -58,7 +58,7 @@ def filter_and_compare(
         Length of the time signal which is generated. Default = 1000 s
     f_kaiser_edge_width: float, optional
     f_low_cut:
-    f_highcut
+    f_cut_high
     timer_units
     timer_n_digits
 
@@ -66,15 +66,15 @@ def filter_and_compare(
     -------
 
     """
-    # Number of samples per fft block used for the welch spectra at the end of the
-    # script. Should be enough to capture the low frequency peak
-    # T_block = n_fft * t_sample =  n_fft / f_sample ->
+    # Number of samples per fft block used for the Welch spectra at the end of the
+    # script. Should be enough to capture the low-frequency peak
+    # T_block = n_fft * t_sample = n_fft / f_sample ->
     #  f_min = 1 / T_block < f_low
     n_fft = 2**12
     t_block = n_fft / f_sample
     delta_f = 1 / t_block
     logger.info(
-        "Using {} points in fft block with time lenght of {} s, leading to delta "
+        "Using {} points in fft block with time length of {} s, leading to delta "
         "frequency of {} Hz".format(n_fft, t_block, delta_f)
     )
 
@@ -92,11 +92,11 @@ def filter_and_compare(
     f_low_cut = None
 
     # turn the frequencies from Hz to rad/s
-    wfiltlow = 0.001  # 2 * np.pi * f_lowcut
+    wfiltlow = 0.001  # 2 * np.pi * f_cut_low
     wfilthig = 2 * np.pi * f_high_cut
 
     if show_kaiser:
-        # calculate the band pass filter coefficients with band with of 1 Hz
+        # calculate the band pass filter coefficients with a bandwidth of 1 Hz.
         taps, n_delay = kaiser_bandpass_coefficients(
             f_low_cut,
             f_high_cut,

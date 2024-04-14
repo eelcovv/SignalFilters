@@ -17,20 +17,20 @@ Notes
   filter, as only the frequencies below f_cut_low are suppress
 * In case only a high cut-off frequency is passed, the filters behave as a low
   pass-filter, as only the frequencies above the f_cut_high are suppressed.
-* In case both the low and high cut-off frequency are given, the filters are
+* In case both the low and high cut-off frequencies are given, the filters are
   band-pass filters.
 * The cut-off frequencies and the sample frequency are given in Hz.
 * The *kaiser_bandpass_filter* and *butter_bandpass_filter* are in fact front-ends to
   the *scipy* filters.
-  In order to use the scipy filter quite some steps are required to calculate
+  To use the scipy filter, quite some steps are required to calculate
   the filter coefficients.
   The implementations in this *signal_processing* package take care of that and then
-  calls the *scipy* filters.
+   call the *scipy* filters.
 * The Ideal block filter *bandpass_block_filter* is a literal copy of the
   Matlab *band_pass2* filter
 * On top of the base filters an extra front end is defined, *filter_signal*,
   which receives the same input arguments as all three filtered mentioned above,
-  plus an argument *filter_type*. With this function we can pick which filter we
+  plus an argument *filter_type*. With this function, we can pick which filter we
   want to use: *kaiser*, *block* or
   *butterworth*. The default choice is *block*.
 """
@@ -39,7 +39,7 @@ import logging
 
 import numpy as np
 from numpy import pi
-from scipy.ndimage.interpolation import shift
+from scipy.ndimage import shift
 from scipy.signal import butter, filtfilt, firwin, kaiserord, lfilter
 
 BUTTER_DEFAULT_ORDER = 2
@@ -96,12 +96,12 @@ def matrix_fft(
       treatment: named input arguments are used Major difference is that this
       routine is only for 1-D signals, in the matlab code the array may contain
       more than one 1-D signals.
-      In case more than one signal needs to be filtered, in the python version
+    * In case more than one signal needs to be filtered, in the python version
       you need to loop over the signals. Since the filter is linear it does not
       influence the calculation time
-
     * Depending on the option s, the following input argument are used an may
-      not be None
+      not be None::
+
        1.   spec 2 DFT    use: [om_DFT,DFT]       = matfft(om_spec,spec,eps,1)
        2.   apply RAO     use: [om_DFT,DFT]       = matfft(om_DFT, DFT,om_RAO,
                                                                        RAO,2)
@@ -174,7 +174,7 @@ def matrix_fft(
         DFT = np.fft.fft(TT, n=n_fft)
         if n_fft != N:
             # in case we have used the add n_fft with a even N, append a zero
-            # at the end to correct the lenght
+            # at the end to correct the length
             DFT = np.append(DFT, np.array([0 + 0 * 1j]))
 
         if N % 2 == 0:
@@ -225,7 +225,7 @@ def bandpass_block_filter(T, X, wfiltlo=None, wfiltup=None):
     Raises
     ------
     ValueError:
-        * In case no cut off frequencies are defined
+        * In case no cut-off frequencies are defined
         * In case that wfiltlo >= wfiltup
 
     Examples
@@ -251,7 +251,7 @@ def bandpass_block_filter(T, X, wfiltlo=None, wfiltup=None):
     -----
     * Explicity extend the input signal with one value in case we have an odd
       signal. This is to avoid a bug in the fft making the function extremely
-      slow for an odd  amount of points.
+      slow for an odd number of points.
     * For the rest the original matlab code is followed as close as possible,
       which means that the variable naming does not follow the PIP standards
     """
@@ -380,21 +380,21 @@ def kaiser_bandpass_coefficients(lowcut, highcut, fs, f_width_edge=None, ripple_
 
     Parameters
     ----------
-    lowcut : float
+    lowcut: float
         The low cut-off frequency [Hz]
-    highcut : float
+    highcut: float
         The high cut-off frequency [Hz]
     fs: float
         Sample frequency [Hz]
     f_width_edge : float, optional
         Give the distance in Hz for the edges of the filter. If None, take 1 Hz.
         Default = None
-    ripple_db:   float, option.
+    ripple_db: float, option.
         The desired attenuation in the stop band, in dB. Default = 200 db
 
     Returns
     -------
-    tuple :
+    tuple:
         (*band_pass_coefficients*, *n_delay*)
 
         - *band_pass_coefficients*: list with the band pass coefficients
@@ -493,19 +493,19 @@ def kaiser_bandpass_filter(
     data: ndarray
         Input signal 1D
     lowcut: float or None, optional
-        Lower frequency in Hz. If lowcut frequency is not given, the filter
+        Lower frequency in Hz. If the low-cut frequency is not given, the filter
         turns into a low-pass filter with only a high cut-off frequency defined.
-        The highcut must be defined in that case
+        The high-cut must be defined in that case
     highcut: float or None, optional
-        higher frequency in Hz. If highcut freqyenc is not given the filter
+        higher frequency in Hz. If the high-cut frequency is not given the filter
         turns into a high-pass filter with only the low cut-off frequency
-        defined.  The lowcut frequency must be defined in that case
+        defined.  The low-cut frequency must be defined in that case
     fs: float, optional
         Sample frequency Hz. Default = 1.0 Hz
     f_width_edge: float, optional
         width of the edges. Default = 0.01
     ripple_db:  float, optional
-        Supresion of the stop band in dB. Default = 100
+        Suppression of the stop band in dB. Default = 100
     cval: float, optional
         Constant value just for the shift. Default = 0
     replace_cval_with_unfiltered_signal: bool, optional
@@ -596,14 +596,14 @@ def kaiser_bandpass_filter(
     return y_fir
 
 
-def butter_bandpass_coefficients(f_lowcut, f_highcut, fs, order=BUTTER_DEFAULT_ORDER):
+def butter_bandpass_coefficients(f_cut_low, f_cut_high, fs, order=BUTTER_DEFAULT_ORDER):
     """Return the filter coefficients of a Butterworth bandpass filter
 
     Parameters
     ----------
-    f_lowcut :
+    f_cut_low :
         Frequency low in Hz: suppress all frequencies below this value
-    f_highcut :
+    f_cut_high :
         Frequency high in Hz: suppress all frequencies above this value
     fs :
         the sample frequencies in Hz
@@ -621,30 +621,30 @@ def butter_bandpass_coefficients(f_lowcut, f_highcut, fs, order=BUTTER_DEFAULT_O
     * This function is a front-end to the *butter* function from the
       *scipy.signal* module.
     * The *butter* function requires the low and/or high cut-off frequency to be
-      expressed as a fraction of the nyqyist frequency defined as 0.5 * f_sample
-    * This function allow to get the Butterworth filter coefficients using the
+      expressed as a fraction of the Nyquist frequency defined as 0.5 * f_sample
+    * This function allows to get the Butterworth filter coefficients using the
       absolute high and low cut frequency as an input
     * This function is used from the *butterworth_filter* function, which is a
       front end to the digital Butterworth filter
     """
     nyq = 0.5 * fs
-    low = f_lowcut / nyq
-    high = f_highcut / nyq
+    low = f_cut_low / nyq
+    high = f_cut_high / nyq
     return butter(order, [low, high], btype="bandpass")
 
 
-def butter_highpass_coefficients(f_lowcut, fs, order=BUTTER_DEFAULT_ORDER):
-    """Return the filter coefficients of a Butterworth high pass filter
+def butter_highpass_coefficients(f_cut_low, fs, order=BUTTER_DEFAULT_ORDER):
+    """Return the filter coefficients of a Butterworth high-pass filter
 
     Parameters
     ----------
-    f_lowcut :
+    f_cut_low :
         suppress all frequencies below this value
     fs :
         the sample frequencies
     order :
         order of the filter: higher order is sharper drop off edge at the cutoff
-        frequencies (order n has 20n dB/decaded drop off) (Default value = 2)
+        frequencies (order n has 20n dB/decade drop off) (Default value = 2)
 
     Returns
     -------
@@ -654,26 +654,26 @@ def butter_highpass_coefficients(f_lowcut, fs, order=BUTTER_DEFAULT_ORDER):
     Notes
     -----
     * The high-pass filter requires a low cut-off frequency: all frequencies
-      below f_lowcut will be suppressed
+      below f_cut_low will be suppressed
 
     """
     nyq = 0.5 * fs
-    low = [f_lowcut / nyq]
+    low = f_cut_low / nyq
     return butter(order, low, btype="highpass")
 
 
-def butter_lowpass_coefficients(f_highcut, fs, order=BUTTER_DEFAULT_ORDER):
-    """Return the filter coefficients of a Butterworth low pass filter
+def butter_lowpass_coefficients(f_cut_high, fs, order=BUTTER_DEFAULT_ORDER):
+    """Return the filter coefficients of a Butterworth low-pass filter
 
     Parameters
     ----------
-    f_highcut :
+    f_cut_high :
         suppress all frequencies above this value
     fs :
         the sample frequencies
     order :
         order of the filter: higher order is sharper drop off edge at the cutoff
-        frequencies (order n has 20n dB/decaded drop off) (Default value = 2)
+        frequencies (order n has 20n dB/decade drop off) (Default value = 2)
 
     Returns
     -------
@@ -683,17 +683,17 @@ def butter_lowpass_coefficients(f_highcut, fs, order=BUTTER_DEFAULT_ORDER):
     Notes
     -----
     * The low-pass filter requires a high cut-off frequency: all frequencies
-      above f_highcut will be suppressed
+      above f_cut_high will be suppressed
     """
     nyq = 0.5 * fs
-    high = [f_highcut / nyq]
+    high = f_cut_high / nyq
     return butter(order, high, btype="lowpass")
 
 
 def butterworth_filter(
     data,
-    f_lowcut=None,
-    f_highcut=None,
+    f_cut_low=None,
+    f_cut_high=None,
     fs=1,
     order=BUTTER_DEFAULT_ORDER,
     use_filtfilt=True,
@@ -705,9 +705,9 @@ def butterworth_filter(
     ----------
     data : ndarray
         Array with the signal to be filtered
-    f_lowcut : float or None, optional
+    f_cut_low : float or None, optional
         low frequency below which to suppress all signals (Default value = None)
-    f_highcut : float or None, optional
+    f_cut_high : float or None, optional
         high frequency above which to suppress all signals (Default value =None)
     fs : float, optional
         sample frequency (Default value = 1)
@@ -715,8 +715,8 @@ def butterworth_filter(
         order of the filter (Default value = 2)
     use_filtfilt: bool, optional
         If true use the filtfilt filter from scipy to take out the phase shift.
-        Default = True. If False, the lfilter is used in stead, causing a phase
-        shift
+        Default = True.
+        If False, the lfilter is used instead, causing a phase shift.
 
     Returns
     -------
@@ -726,7 +726,7 @@ def butterworth_filter(
     Raises
     ------
     ValueError:
-        * In case no cut off frequencies are defined
+        * In case no cut-off frequencies are defined
         * In case that wfiltlo >= wfiltup
 
     Examples
@@ -739,68 +739,66 @@ def butterworth_filter(
     >>> y_orig = np.sin(2 * pi * x / 2.5) + np.sin(2 * pi * x / 1.0)
     >>> y_noise = y_orig + np.random.random_sample(x.size)
 
-    Filter the signal with the high pass butt block filter to recover the
-    peak  with period of 1.0 s.
-    Note the for the high-pass filter, we have to define the low-cut frequency
-    f_low (as all the frequency below f_low are suppress)
+    Filter the signal with the high pass butt block filter to recover the peak with a
+    period of 1.0 s.
+    Note that for the high-pass filter, we have to define the low-cut frequency
+    f_low (as all the frequencies below f_low are suppressed)
 
-    >>> f_low = 1 / 2.0  # T =  2.0 s. f_low is the frequency in Hz
-    >>> y_recov = butterworth_filter(y_noise, f_lowcut=f_low, order=4, fs=fs)
+    >>> f_low = 1 / 2.0 # T = 2.0 s. f_low is the frequency in Hz
+    >>> y_recover = butterworth_filter(y_noise, f_cut_low=f_low, order=4, fs=fs)
 
     The recovered signal *y_recov* now contains the filtered signal.
 
-    We can also apply a low pass filter in order to remove the peak with a
-    frequency of 1 Hz
+    We can also apply a low-pass filter to remove the peak with a frequency of 1 Hz
 
-    >>> f_high = 1 / 2.0  # T =  2.0 s. f_low is the frequency in Hz
-    >>> y_recov = butterworth_filter(y_noise, f_highcut=f_high, order=4, fs=fs)
+    >>> f_high = 1 / 2.0  # T = 2.0 s. f_low is the frequency in Hz
+    >>> y_recover = butterworth_filter(y_noise, f_cut_high=f_high, order=4, fs=fs)
 
     Perhaps better would be to use a band pass filter by both defining a high
-    and low cut off frequency. If we want to recover the peak with a period of
-    1.0 s we can do
+    and low cut-off frequency. If we want to recover the peak with a period of
+    1.0 seconds we can do
 
-    >>> f_high = 1 / 0.5  # T =  0.5 s. Supress all frequencies above 2 Hz
-    >>> f_low = 1 / 2.0  # T =  2.0 s. Suppress all frequency below  0.5 Hz
-    >>> y_recov = butterworth_filter(y_noise, f_highcut=f_high, f_lowcut=f_low,
-                                     fs=fs)
+    >>> f_high = 1 / 0.5  # T = 0.5 s. Supress all frequencies above 2 Hz
+    >>> f_low = 1 / 2.0  # T = 2.0 s. Suppress all frequency below 0.5 Hz
+    >>> y_recover = butterworth_filter(y_noise, f_cut_high=f_high, f_cut_low=f_low,
+    ...                                fs=fs)
 
     Notes
     -----
-    * The *order* argument is used to control the sharpness of the filter:
-      a high order will result in a stronger suppression of frequencies outside
-      the cut-off limits
-    * A *order* which is too high also leads to an overflow of the filter.
-      Use try-and-error to find an optimal *order*. Typically *order* should be
+    * The *order* argument is used to control the sharpness of the filter a high order
+      will result in a stronger suppression of frequencies outside the cut-off limits.
+    * An *order* which is too high also leads to an overflow of the filter. Use
+      trial-and-error to find an optimal *order*. Typically, *order* should be
       between 2 and 5
     * In case the filter type is set to *high*, only the low cut-off frequence
-      f_lowcut needs to be defined: all the frequencies below f_lowcut will be
-       suppress (hence: high-pass)
+      f_cut_low needs to be defined: all the frequencies below f_cut_low will be
+      suppressed (hence: high-pass)
     * In case the filter type is set to *low*, only the high cut-off frequence
-      f_highcut needs to be defined: all the frequencies above f_highcut will
-       be suppress (hence: low-pass)
+      f_cut_high needs to be defined: all the frequencies above f_cut_high will
+      be suppressed (hence: low-pass)
     """
-    if f_highcut is None and f_lowcut is None:
+    if f_cut_high is None and f_cut_low is None:
         raise ValueError(
             "At least one of the cut-off frequencies must be given "
-            "(f_highcut or f_lowcut)"
+            "(f_cut_high or f_cut_low)"
         )
-    if f_highcut is not None and f_lowcut is not None and f_lowcut >= f_highcut:
+    if f_cut_high is not None and f_cut_low is not None and f_cut_low >= f_cut_high:
         raise ValueError(
             "The low cut-off frequency must be smaller  than the high cut-off "
         )
 
-    if f_highcut is None:
-        # only the low cut-off frequency is given, so we have a high pass filter
-        coefficients = butter_highpass_coefficients(f_lowcut, fs, order=order)
-    elif f_lowcut is None:
-        # only the high  cut off frequency is given, so we have a low pass
+    if f_cut_high is None:
+        # only the low cut-off frequency is given, so we have a high-pass filter
+        coefficients = butter_highpass_coefficients(f_cut_low, fs, order=order)
+    elif f_cut_low is None:
+        # only the high cut-off frequency is given, so we have a low-pass
         # filter
-        coefficients = butter_lowpass_coefficients(f_highcut, fs, order=order)
+        coefficients = butter_lowpass_coefficients(f_cut_high, fs, order=order)
     else:
         # both the high and low cut off frequencies are given, so we have a
         # band pass filter
         coefficients = butter_bandpass_coefficients(
-            f_lowcut, f_highcut, fs, order=order
+            f_cut_low, f_cut_high, fs, order=order
         )
 
     b, a = coefficients[0], coefficients[1]
@@ -814,8 +812,8 @@ def butterworth_filter(
 
 
 def remove_phase_shift(signal, degrees=True):
-    """Apply a phase shift to the angles of *signal* in order to get rid of
-       phase-jumps at zero degrees
+    """Apply a phase shift to the angles of *signal* to get rid of phase-jumps at
+    zero degrees
 
     Parameters
     ----------
@@ -831,16 +829,13 @@ def remove_phase_shift(signal, degrees=True):
 
     Notes
     -----
-    * The  yaw angle sometimes has discontinuities when the phase angle goes
-      from 0 to 360.
-      In order to avoid this, in this routine the range of the yaw is put as
-      good as possible in the range between 0 and 360
-    * In case the MRU 6-DOF motions needs to be filtered in order to obtained
-      the accelerations, the yaw needs to be put into the range 0~360, otherwise
-      the discontinuity at 0 degrees will lead to an artificial spike in the
-      acceleration.
-    * In case the signal passes the zero degrees two times this routine will
-      fail.
+    * The yaw angle sometimes has discontinuities when the phase angle goes from 0 to
+      360. To avoid this, in this routine the range of the yaw is put as good as
+      possible in the range between 0 and 360.
+    * In case the MRU 6-DOF motions need to be filtered in order to obtain
+      the accelerations, the yaw needs to be put into the range 0~360, otherwise the
+      discontinuity at 0 degrees will lead to an artificial spike in the acceleration.
+    * In case the signal passes the zero degree two times, this routine will fail.
 
     Examples
     --------
@@ -851,7 +846,7 @@ def remove_phase_shift(signal, degrees=True):
     discontinuity at 0.
 
     >>> yaw = np.hstack([np.linspace(350, 360, num=5, endpoint=False),
-                         np.linspace(0, 10, num=5)])
+    ...                  np.linspace(0, 10, num=5)])
     >>> print(yaw)
     [ 350.   352.   354.   356.   358.     0.     2.5    5.     7.5   10. ]
 
@@ -921,10 +916,10 @@ def filter_signal(
     filter_type: {"mean", "butterworth", "kaiser", "block", "none"}
         Type of the filter to use. Default = block.
     f_cut_low: Quantity or float or None
-        Low  cut-off frequency in Hz. Default = None, which means that f_cut_high must
+        Low cut-off frequency in Hz. Default = None, which means that f_cut_high must
         be given and that we are dealing with a low-pass filter
     f_cut_high: Quantity or float or None
-        High  cut-off frequency in Hz. Default = None, which means that f_cut_low must
+        High cut-off frequency in Hz. Default = None, which means that f_cut_low must
         be given and that we are dealing with a high-pass filter
     f_sampling: Quantity or float
         Sampling frequency. Default = 1 Hz
@@ -934,12 +929,12 @@ def filter_signal(
         filter better. Default = 0.05 Hz
     ripple_db: float, optional
         The desired attenuation in the stop band in dB. Only used when
-        filter_type == "kaiser" . Default = 100 dB
+        filter_type == "kaiser". Default = 100 dB
     order: int
         Order of the Butterworth filter. Only used when filter_type=="butterworth".
         Default = 2.
         Higher values causes to approach the ideal block band filter, but also a more
-        instable filter.
+        unstable filter.
     constant_value: float
         Constant to use for the Kaiser filter when a phase shift correction is applied.
         Default = None, which means that the phase shift is not correct. Since we use
@@ -957,23 +952,22 @@ def filter_signal(
     Raises
     ------
     ValueError:
-        * In case no cut off frequencies are defined
+        * In case no cut-off frequencies are defined
         * In case that wfiltlo >= wfiltup
 
     Notes
     -----
     * This function is a front end to the other filters in this module
-    * The NA uest frequency follows from the sample frequency as f_nyq = f_s / 2
-    * At least one of the cut off frequencies must be properly defined, i.e. in the
+    * The Nyquist frequency follows from the sample frequency as f_nyq = f_s / 2
+    * At least one of the cut-off frequencies must be properly defined, i.e. in the
       range 0 ~ f_nyq
     * For f_cut_low == None (or 0), the filter is acting as a low-pass filter with its
       cut-off frequency given by f_cut_high. All frequencies above f_cut_high will be
       suppressed
-    * For f_cut_high == None (or >= f_nyquist), the filter is acting as a high-pass
-      filter with its
-      cut-off frequency given by f_cut_low. All frequencies below f_cut_low will be
-      suppressed
-    * If both f_cut_low and f_cut_high are in the range 0 ~ f_nyquist,  the filter is
+    * For f_cut_high == None or f_cut_high >= f_nyquist, the filter is acting as a
+      high-pass filter with its cut-off frequency given by f_cut_low.
+      All frequencies below f_cut_low will be suppressed.
+    * If both f_cut_low and f_cut_high are in the range 0 ~ f_nyquist, the filter is
       acting as a band pass filter
     """
 
@@ -997,8 +991,8 @@ def filter_signal(
     if filter_type == "butterworth":
         filtered = butterworth_filter(
             data=signal,
-            f_lowcut=f_cut_low,
-            f_highcut=f_cut_high,
+            f_cut_low=f_cut_low,
+            f_cut_high=f_cut_high,
             fs=f_sampling,
             order=order,
         )
@@ -1006,18 +1000,18 @@ def filter_signal(
         filtered = signal - signal.mean()
     elif filter_type == "block":
         delta_t = 1.0 / f_sampling
-        # The block filter does not allow a pure high or low pass filter, only band.
+        # The block filter does not allow a pure high or low-pass filter, only band.
         # Mimic pure high or low pass by settings the cut-off frequencies to 0 or the
         # Nyquist frequency
         if f_cut_low is None:
-            # in this case we want to model a low-pass filter (with the f_cut_high as
+            # In this case, we want to model a low-pass filter (with the f_cut_high as
             # the maximum f)
             # set omega_cut to 0
             omega_cut_low = 0
         else:
             omega_cut_low = 2 * pi * f_cut_low
         if f_cut_high is None:
-            # in this case we want to model a high-pass filter (with the f_cut_low as
+            # In this case, we want to model a high-pass filter (with the f_cut_low as
             # the minimum f) # set omega_cut to the Nyquist frequency f_n = f_s / 2
             omega_cut_high = 2 * pi * f_sampling / 2.0
         else:
@@ -1037,7 +1031,7 @@ def filter_signal(
             use_filtfilt=use_filtfilt,
         )
     elif filter_type == "none":
-        # no filtering at all. Just pass the signal
+        # No filtering at all. Pass the signal without changing.
         filtered = signal
     else:
         logger.warning("Filter not yet implemented")
