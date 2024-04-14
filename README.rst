@@ -19,32 +19,24 @@ The signal processing tool box has the following topics
     - Kaiser filter
     - Phase shift removal
 2. utils: Classes and function to support signal processing
-    - SignalGenerator: class to generated signal with multiple harmonic components and noise for
-      testing purposes
-    - get_peaks: Extract the peaks from a power spectral density
+    - *SignalGenerator*: class to generated signal with multiple harmonic components
+      and noise for testing purposes
+    - *get_peaks*: Extract the peaks from a power spectral density
 
 Installation
 ============
 
-*SignalFilters* can be installed via pip from `PyPi`_::
+*SignalFilters* can be installed via pip from `PyPi`_
 
     pip install SignalFilters
 
-Notes
------
-
-* The `SciPy`_ packages provides most signal processing tool, such as as a Power
-  Spectral Density (PSF) estimator.
-* The filters defined in this package are a front end to the Scipy filters, making it
-   easier to use digital filters in your code.
-* For peak finding either the `PeakUtils`_ or the `PyWafo`_ package is recommended.
-* The function *get_peaks* is a front end to the *peakutils.peaks* function
 
 Examples
 ========
 
-Using digital filters is easy. First define a sine wave with a period of 10 seconds
-with some noice
+Using digital filters is easy. In two steps we do:
+
+1. Define a noisy sine wave
 
 .. code-block:: python
 
@@ -53,7 +45,7 @@ with some noice
 
 
     A_peak = 1.0            # Amplitude at 10 m
-    a_noice = 0.2 * A       # Noice rms at 0.2 m
+    a_noise = 0.2 * A       # Noise rms at 0.2 m
     T_peak = 10             # period of 10 seconds
     f_peak = 1 / T_peak     # peak frequency at 0.1 Hz
     total_time = 1000       # total sampling time of 1000 seconds
@@ -62,11 +54,11 @@ with some noice
 
     time = linspace(0, total_time, num=n_points, endpoint=False)
     y_original = sin(2 * pi * time / T_peak)
-    y_noise = random.normal(scale=a_noice, size=y_original.size)
+    y_noise = random.normal(scale=a_noise, size=y_original.size)
     y_total = y_original + y_noise
 
-Next, we can filter this signal with a band pass filter with a cut-off at 0.08 Hz (low)
-and at 0.12 Hz (high), such that the expected peak at 0.1 Hz is retrieved:
+2. Filter the noisy sine wave with a band pass filter with low and high cut-off
+   frequency at 0.08 Hz and 0.12 Hz, respectively:
 
 .. code-block:: python
 
@@ -89,8 +81,13 @@ More examples can be found at example_filtering_ and example_filtering_rtd_.
 .. _PyWafo:
     https://github.com/wafo-project/pywafo
 
-Note
-====
-
-This project has been set up using PyScaffold 4.5.0. For details and usage
-information on PyScaffold see http://pyscaffold.readthedocs.org/.
+Notes
+=====
+* The `SciPy`_ packages provides most signal processing tool, such as as a Power
+  Spectral Density (PSF) estimator.
+* The filters defined in this package are a front end to the Scipy filters, making it
+  easier to use digital filters in your code.
+* For peak finding either the `PeakUtils`_ or the `PyWafo`_ package is recommended.
+* The function *get_peaks* is a front end to the *peakutils.peaks* function
+* This project has been set up using PyScaffold 4.5.0. For details and usage
+  information on PyScaffold see http://pyscaffold.readthedocs.org/.
