@@ -1,0 +1,19 @@
+# Set the maximum line length
+line-length = 100
+# Select specific error codes to check
+select = ["E", "W", "F", "C90"]
+# Ignore specific error codes
+ignore = ["E501"]
+# Exclude specific directories from checks
+exclude = [
+    "tests/*",
+    "docs/*",
+    ".direnv/*",
+    ".venv/*",
+    "build/*",
+    "dist/*",
+    "node_modules/*",
+    "coverage/*",
+    "*.egg-info/*",
+    "*.eggs/*",
+]
